@@ -1,0 +1,1 @@
+Now with Gemini AI integration and multi-cascade RAG for smarter screen history search!

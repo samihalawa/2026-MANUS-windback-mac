@@ -1,0 +1,46 @@
+default_platform(:mac)
+
+platform :mac do
+  desc "Build and archive for App Store"
+  lane :release do
+    increment_build_number(
+      xcodeproj: "AutoRecall.xcodeproj"
+    )
+
+    build_mac_app(
+      scheme: "AutoRecall",
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "WindBack.app"
+    )
+
+    upload_to_app_store(
+      skip_screenshots: true,
+      skip_metadata: false,
+      force: true
+    )
+  end
+
+  desc "Build for testing/distribution"
+  lane :beta do
+    build_mac_app(
+      scheme: "AutoRecall",
+      configuration: "Release",
+      export_method: "developer-id",
+      output_directory: "./build"
+    )
+  end
+
+  desc "Run tests"
+  lane :test do
+    run_tests(
+      scheme: "AutoRecallTests"
+    )
+  end
+
+  desc "Build using Swift Package Manager"
+  lane :build_spm do
+    sh("cd .. && swift build -c release")
+  end
+end

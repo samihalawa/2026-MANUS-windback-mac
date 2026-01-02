@@ -1,0 +1,32 @@
+WindBack is a privacy-focused macOS application that helps you remember everything you've seen on your screen.
+
+KEY FEATURES:
+
+• Screen Recording & OCR
+Continuously captures your screen activity and extracts text using advanced OCR technology, making everything searchable.
+
+• AI-Powered Search with RAG
+Uses Retrieval-Augmented Generation to intelligently search through your screen history. Ask natural questions like "What was I working on yesterday?" and get accurate answers.
+
+• Clipboard History
+Never lose copied content again. WindBack tracks your clipboard history including text, images, URLs, and files.
+
+• Timeline Navigation
+Scroll through your digital history with an intuitive timeline view. Jump to any moment in your past activity.
+
+• Multi-Cascade Context
+Advanced RAG system organizes your history into immediate (4h), historical (7d), and thematic (all-time) context tiers for optimal AI understanding.
+
+• Privacy First
+All data stays on your device. No cloud uploads, no tracking, no telemetry. All AI processing happens locally or with your own API keys.
+
+• Gemini AI Integration
+Connect your Google Gemini API key for powerful AI-assisted analysis of your screen history.
+
+PERFECT FOR:
+• Developers who need to recall code snippets
+• Researchers tracking sources and references
+• Professionals who attend many meetings
+• Anyone who wants a better digital memory
+
+WindBack - Take control of your digital memory.
