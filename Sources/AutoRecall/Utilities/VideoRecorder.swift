@@ -85,7 +85,7 @@ class VideoRecorder: NSObject, SCStreamOutput, SCStreamDelegate {
         }
     }
     
-    private init() {
+    private override init() {
         // Initialize with default settings
         // Read saved compression quality from UserDefaults
         if let savedQuality = UserDefaults.standard.string(forKey: "videoCompressionQuality"),

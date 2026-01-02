@@ -77,6 +77,7 @@ struct VideosListView: View {
     @State private var sortOption: SortOption = .newest
     @State private var retentionDays: Int = 30
     @State private var showSettings = false
+    @State private var isLoading = false
 
     var body: some View {
         VStack {

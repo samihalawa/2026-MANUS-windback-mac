@@ -93,6 +93,63 @@ class ClipboardManager: ObservableObject {
         self.refreshItems()
     }
     
+    // MARK: - Save Clipboard Methods
+
+    private func saveClipboardText(_ text: String) {
+        let item = ClipboardItem(
+            id: UUID(),
+            text: text,
+            type: .text,
+            timestamp: Date(),
+            data: nil
+        )
+        addItem(item)
+    }
+
+    private func saveClipboardURL(_ urlString: String) {
+        let item = ClipboardItem(
+            id: UUID(),
+            text: urlString,
+            type: .url,
+            timestamp: Date(),
+            data: nil
+        )
+        addItem(item)
+    }
+
+    private func saveClipboardImage(_ image: NSImage) {
+        let item = ClipboardItem(
+            id: UUID(),
+            text: "Image",
+            type: .image,
+            timestamp: Date(),
+            data: image.tiffRepresentation
+        )
+        addItem(item)
+    }
+
+    private func saveClipboardFileURLs(_ urls: [URL]) {
+        let content = urls.map { $0.path }.joined(separator: "\n")
+        let item = ClipboardItem(
+            id: UUID(),
+            text: content,
+            type: .file,
+            timestamp: Date(),
+            data: nil
+        )
+        addItem(item)
+    }
+
+    private func addItem(_ item: ClipboardItem) {
+        DispatchQueue.main.async {
+            self.items.insert(item, at: 0)
+            // Trim to max items
+            if self.items.count > self.maxItems {
+                self.items = Array(self.items.prefix(self.maxItems))
+            }
+        }
+    }
+
     /// Create a manual clipboard entry
     func createManualClipboardEntry(content: String, type: ClipboardItemType = .text) {
         NSLog("📋 Creating manual clipboard entry")
@@ -150,30 +207,30 @@ class ClipboardManager: ObservableObject {
                 NSLog("📋 Copied image to clipboard")
             } else {
                 // If we can't find the image, just copy the text
-                pasteboard.setString(item.content, forType: .string)
+                pasteboard.setString(item.text ?? "", forType: .string)
                 NSLog("📋 Copied text to clipboard (image not found)")
             }
         case .url:
-            if let url = URL(string: item.content) {
+            if let url = URL(string: item.text ?? "") {
                 pasteboard.writeObjects([url as NSURL])
                 NSLog("📋 Copied URL to clipboard")
             } else {
-                pasteboard.setString(item.content, forType: .string)
+                pasteboard.setString(item.text ?? "", forType: .string)
                 NSLog("📋 Copied text to clipboard (invalid URL)")
             }
         case .file:
             // For file references, we copy the path(s) back to the clipboard
             // as both file URLs and string paths
-            let fileURL = URL(fileURLWithPath: item.content)
+            let fileURL = URL(fileURLWithPath: item.text ?? "")
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 pasteboard.writeObjects([fileURL as NSURL])
                 NSLog("📋 Copied file to clipboard")
             } else {
-                pasteboard.setString(item.content, forType: .string)
+                pasteboard.setString(item.text ?? "", forType: .string)
                 NSLog("📋 Copied file path to clipboard (file not found)")
             }
         default:
-            pasteboard.setString(item.content, forType: .string)
+            pasteboard.setString(item.text ?? "", forType: .string)
             NSLog("📋 Copied text to clipboard")
         }
     }

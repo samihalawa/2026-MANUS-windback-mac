@@ -60,10 +60,6 @@ struct TextTestView: View {
 
 struct TextInputApp_Previews: PreviewProvider {
     static var previews: some View {
-        TextInputApp()
-        // Remove test call
-        // .onAppear {
-        //     TextInputTester.runTests()
-        // }
+        TextTestView()
     }
 } 
