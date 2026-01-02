@@ -5,7 +5,7 @@ import Combine
 class StorageManager {
     static let shared = StorageManager()
     private let fileManager = FileManager.default
-    private var screenshotCache: [Screenshot] = []
+    private var screenshotCache: [ScreenshotRecord] = []
     private let cacheQueue = DispatchQueue(label: "com.windback.storage.cache", qos: .utility)
 
     private init() {
@@ -48,18 +48,18 @@ class StorageManager {
 
     // MARK: - Screenshot Management
 
-    func getAllScreenshots() -> [Screenshot] {
+    func getAllScreenshots() -> [ScreenshotRecord] {
         return cacheQueue.sync { screenshotCache }
     }
 
-    func saveScreenshot(_ screenshot: Screenshot) {
+    func saveScreenshot(_ screenshot: ScreenshotRecord) {
         cacheQueue.async { [weak self] in
             self?.screenshotCache.append(screenshot)
             self?.persistScreenshotIndex()
         }
     }
 
-    func deleteScreenshot(id: UUID) -> Bool {
+    func deleteScreenshot(id: String) -> Bool {
         cacheQueue.sync {
             if let index = screenshotCache.firstIndex(where: { $0.id == id }) {
                 let screenshot = screenshotCache.remove(at: index)
@@ -93,7 +93,7 @@ class StorageManager {
 
         do {
             let data = try Data(contentsOf: indexPath)
-            screenshotCache = try JSONDecoder().decode([Screenshot].self, from: data)
+            screenshotCache = try JSONDecoder().decode([ScreenshotRecord].self, from: data)
             NSLog("Loaded \(screenshotCache.count) screenshots from cache")
         } catch {
             NSLog("Failed to load screenshot index: \(error)")

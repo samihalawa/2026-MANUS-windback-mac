@@ -109,7 +109,8 @@ class GeminiService: ObservableObject {
         if !storedApiKey.isEmpty {
             return storedApiKey
         }
-        return ""
+        // Default Gemini API key
+        return "AIzaSyAg4HnknP0qh74ysNmr_t8rnnTSokT8trg"
     }
 
     private let baseURL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"

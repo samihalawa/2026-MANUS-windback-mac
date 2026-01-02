@@ -18,7 +18,7 @@ struct RAGContext {
     let immediateContext: [FrameContext]      // Cascade 1: Last 4 hours
     let historicalContext: [FrameContext]     // Cascade 2: Last 7 days
     let thematicContext: [FrameContext]       // Cascade 3: All history
-    let relevanceScores: [UUID: Double]       // Frame relevance scores
+    let relevanceScores: [String: Double]      // Frame relevance scores
     let totalTokensEstimate: Int              // Token usage estimate
 
     var isEmpty: Bool {
@@ -28,7 +28,7 @@ struct RAGContext {
 
 /// Individual frame context with metadata
 struct FrameContext: Identifiable {
-    let id: UUID
+    let id: String
     let text: String                          // OCR text content
     let timestamp: Date                       // When frame was captured
     let appName: String?                      // Application name
@@ -114,7 +114,7 @@ class RAGService: ObservableObject {
         )
 
         // Calculate relevance scores
-        var scores: [UUID: Double] = [:]
+        var scores: [String: Double] = [:]
         for frame in immediate { scores[frame.id] = 1.0 }
         for frame in historical { scores[frame.id] = 0.6 }
         for frame in thematic { scores[frame.id] = 0.3 }
